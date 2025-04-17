@@ -9,8 +9,20 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^6.3.0",
+    "@astrojs/preact": "^4.0.9",
+    "@tailwindcss/vite": "^4.1.4",
     "astro": "^5.7.2",
+    "preact": "^10.26.5",
     "prettier": "^3.5.3",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "tailwindcss": "^4.1.4"
+  },
+  "devDependencies": {
+    "prettier-plugin-tailwindcss": "^0.6.11"
+  },
+  "overrides": {
+    "react": "npm:@preact/compat@latest",
+    "react-dom": "npm:@preact/compat@latest"
   }
 }
