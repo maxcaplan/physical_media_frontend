@@ -1,0 +1,20 @@
+---
+interface Props {
+  href: string;
+  title?: string;
+  class?: string;
+  active_href?: string;
+}
+
+const { href, title, active_href, ...props } = Astro.props;
+
+const is_active = href === Astro.url.pathname;
+---
+
+<a
+  href={is_active ? active_href || "#" : href}
+  title={title}
+  class={`hover:underline ${is_active ? "font-bold" : ""} ${props.class || ""}`}
+>
+  <slot />
+</a>

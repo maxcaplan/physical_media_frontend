@@ -1,7 +1,21 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import OwnedAlbumList from "@/components/OwnedAlbumList/index.astro";
+import WishlistAlbumList from "@/components/WishlistAlbumList/index.astro";
 ---
 
-<Layout title="Home">
-  <h1 class="text-3xl font-bold">Home</h1>
+<Layout title_prefix="Home">
+  <div class="flex flex-col gap-6">
+    <h1 class="text-3xl font-bold">Home</h1>
+
+    <hr class="my-2" />
+
+    <OwnedAlbumList display_fields={["name", "artists", "genres", "release_date"]} server:defer>
+      <p slot="fallback">Loading...</p>
+    </OwnedAlbumList>
+
+    <WishlistAlbumList display_fields={["name", "artists", "genres", "release_date"]} server:defer>
+      <p slot="fallback">Loading...</p>
+    </WishlistAlbumList>
+  </div>
 </Layout>

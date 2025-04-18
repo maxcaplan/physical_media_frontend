@@ -1,0 +1,23 @@
+---
+interface Props<TData = Object> {
+  items?: TData[];
+  field: keyof TData;
+}
+
+const { items, field } = Astro.props;
+---
+
+<p>
+  {
+    items?.length ? (
+      items.map((item, idx, arr) => (
+        <span>
+          {item[field]}
+          {idx < arr.length - 1 && ","}
+        </span>
+      ))
+    ) : (
+      <span>N/A</span>
+    )
+  }
+</p>

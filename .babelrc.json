@@ -1,0 +1,12 @@
+{
+  "presets": ["react-app"],
+  "plugins": [
+    [
+      "@graphql-codegen/client-preset",
+      {
+        "artifactDirectory": "./src/graphql",
+        "gqlTagName": "graphql"
+      }
+    ]
+  ]
+}

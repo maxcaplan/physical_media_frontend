@@ -1,0 +1,93 @@
+---
+import { graphql } from "@/graphql";
+import { gql_fetch } from "@/helpers/graphql";
+
+import type { WishlistAlbum, Album, OwnedAlbum } from "@/graphql/graphql";
+
+import OwnedAlbumListItem from "./OwnedAlbumListItem.astro";
+
+export type FlatAlbumFields = (keyof (Omit<OwnedAlbum, "album" | "id"> & Album))[];
+
+interface Props {
+  display_fields: FlatAlbumFields;
+}
+
+const query = graphql(`
+  query owned_albums {
+    owned_albums {
+      id
+      album {
+        id
+        name
+        description
+        artists {
+          id
+          name
+          origin
+          description
+        }
+        producers {
+          id
+          name
+        }
+        genres {
+          id
+          name
+        }
+        labels {
+          id
+          name
+        }
+        length
+        tracks {
+          id
+          name
+          length
+          side
+          position
+        }
+      }
+      condition
+    }
+  }
+`);
+
+const endpoint = import.meta.env.GRAPHQL_ENDPOINT as string;
+const response = await gql_fetch(endpoint, query);
+
+const { ...props } = Astro.props;
+
+const capitalize = (value: string): string =>
+  (value && String(value[0]).toUpperCase() + String(value).slice(1)) || "";
+---
+
+<div class="flex flex-col gap-4">
+  <h2 class="text-xl">Owned Albums:</h2>
+
+  <ul class="flex flex-col gap-2">
+    {
+      (
+        <div
+          class="grid grid-cols-10 rounded border border-gray-300 bg-gray-100 font-bold"
+          style={`grid-template-columns: repeat(${props.display_fields.length}, minmax(0, 1fr))`}
+        >
+          {props.display_fields.map((field, index, arr) => (
+            <p class:list={["border-gray-300 px-3 py-1", { "border-r": index < arr.length - 1 }]}>
+              {capitalize(field)}
+            </p>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      response.owned_albums === undefined ? (
+        <p class="italic">No albums found...</p>
+      ) : (
+        response.owned_albums.map((album) => (
+          <OwnedAlbumListItem album={album as OwnedAlbum} display_fields={props.display_fields} />
+        ))
+      )
+    }
+  </ul>
+</div>

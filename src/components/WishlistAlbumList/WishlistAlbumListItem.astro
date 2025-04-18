@@ -1,0 +1,54 @@
+---
+import type { WishlistAlbum } from "@/graphql/graphql";
+import type { FlatAlbumFields } from "./index.astro";
+import WishlistAlbumListItemListField from "./WishlistAlbumListItemListField.astro";
+
+interface Props {
+  album: WishlistAlbum;
+  display_fields: FlatAlbumFields;
+}
+
+const { album, display_fields } = Astro.props;
+---
+
+<li
+  class="grid grid-cols-6 rounded border border-gray-300"
+  style={`grid-template-columns: repeat(${display_fields.length}, minmax(0, 1fr))`}
+>
+  {
+    display_fields.map((field, index, arr) => {
+      return (
+        <div class:list={["border-gray-300 p-3", { "border-r": index < arr.length - 1 }]}>
+          {() => {
+            switch (field) {
+              case "ranking":
+                return <p>{album.ranking}</p>;
+              case "artists":
+                return <WishlistAlbumListItemListField items={album.album?.artists} field="name" />;
+              case "description":
+                return <p>{album.album?.description}</p>;
+              case "genres":
+                return <WishlistAlbumListItemListField items={album.album?.genres} field="name" />;
+              case "labels":
+                return <WishlistAlbumListItemListField items={album.album?.labels} field="name" />;
+              case "length":
+                return <p>{album.album?.length}</p>;
+              case "name":
+                return <p>{album.album?.name}</p>;
+              case "producers":
+                return (
+                  <WishlistAlbumListItemListField items={album.album?.producers} field="name" />
+                );
+              case "release_date":
+                return <p>{album.album?.release_date}</p>;
+              case "tracks":
+                return <WishlistAlbumListItemListField items={album.album?.tracks} field="name" />;
+              default:
+                break;
+            }
+          }}
+        </div>
+      );
+    })
+  }
+</li>
